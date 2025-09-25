@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>جستجوی هوشمند - نئونی</title>
+<link rel="stylesheet" href="css/style.css">
+  <!-- Vazirmatn -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN (play) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root{
+      --bg1: #0f172a; /* slate-900 */
+      --neon-c: #7c3aed; /* purple-600 */
+      --neon-c2: #06b6d4; /* cyan-500 */
+    }
+    html,body { height:100%; font-family: 'Vazirmatn', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: radial-gradient(1200px 500px at 10% 10%, rgba(124,58,237,0.08), transparent), radial-gradient(900px 400px at 90% 90%, rgba(6,182,212,0.06), transparent), var(--bg1); color:#e6eef8; }
+    .neon { text-shadow: 0 0 8px rgba(124,58,237,0.6), 0 0 20px rgba(6,182,212,0.08); }
+    .glow-card { background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(124,58,237,0.12); box-shadow: 0 8px 30px rgba(2,6,23,0.6); }
+    .highlight { background: linear-gradient(90deg, rgba(124,58,237,0.18), rgba(6,182,212,0.12)); padding: 0.06rem 0.18rem; border-radius: 6px; color: white; }
+    /* RTL tweaks for small devices */
+    @media (max-width:640px){ .main-grid { grid-template-columns: 1fr; } .info-panel{ border-radius: 12px 12px 0 0; } }
+  </style>
+</head>
+<body>
+  <main class="min-h-screen p-6 flex items-center justify-center">
+    <section class="w-full max-w-6xl grid main-grid grid-cols-2 gap-8">
+      <!-- info -->
+      <div class="info-panel glow-card p-8 rounded-2xl flex flex-col justify-between">
+        <div>
+          <h1 class="text-3xl font-bold neon">به پلتفرم جستجوی هوشمند خوش آمدید</h1>
+          <p class="mt-3 text-sm text-slate-300">جستجویی که روی فایل JSON شما ماتریس TF-IDF می‌سازد، فازی می‌کند و نیت کاربر را حدس می‌زند — همه با جاوااسکریپت و Tailwind.</p>
+        </div>
+
+        <div class="mt-6">
+          <label class="text-xs text-slate-300">بارگذاری فایل JSON (اختیاری)</label>
+          <div class="mt-2 flex gap-2">
+            <input id="jsonFile" type="file" accept=".json" class="block w-full text-sm text-slate-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg
+              file:border-0 file:text-sm file:bg-violet-600 file:text-white cursor-pointer" />
+            <button id="resetDb" class="px-4 py-2 rounded-lg bg-slate-700 text-sm">بازگردانی نمونه</button>
+          </div>
+
+          <div class="mt-4 text-xs text-slate-400">
+            <div>مد: <span id="modeLabel" class="font-medium">ترکیبی (TF-IDF + فازی)</span></div>
+            <div class="mt-2 flex gap-2">
+              <button data-mode="tfidf" class="modeBtn px-3 py-1 rounded-md bg-slate-800 text-slate-200">TF-IDF</button>
+              <button data-mode="fuzzy" class="modeBtn px-3 py-1 rounded-md bg-slate-800 text-slate-200">فازی</button>
+              <button data-mode="combined" class="modeBtn px-3 py-1 rounded-md bg-violet-600 text-white">ترکیبی</button>
+            </div>
+          </div>
+
+          <div class="mt-4 text-xs text-slate-400">
+            <div>توضیح مدل:</div>
+            <ul class="mt-2 list-disc list-inside text-slate-400">
+              <li>می‌سازد: واژه‌نامه و بردار TF-IDF از فایل JSON</li>
+              <li>می‌سنجد: کسینوس شباهت + تطبیق فازی برای زبان‌های لاتین/فارسی</li>
+              <li>حدس نیت: کلمات کلیدی و وزن‌دهی هوشمند</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- search & results -->
+      <section class="form-panel glow-card p-6 rounded-2xl">
+        <div class="mb-4">
+          <div class="flex items-center gap-3">
+            <input id="query" class="flex-1 px-4 py-3 rounded-lg bg-slate-900 placeholder:text-slate-400 outline-none" placeholder="مثال: چطور رمز خود را بازیابی کنم؟ یا آموزش نصب محصول" />
+            <button id="searchBtn" class="px-4 py-3 rounded-lg bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-medium">جستجو</button>
+          </div>
+          <div class="mt-3 text-xs text-slate-400 flex items-center gap-3">
+            <div>نتایج: <span id="resultCount" class="font-medium">0</span></div>
+            <div class="ml-auto">نیت شناسایی‌شده: <span id="detectedIntent" class="font-medium">—</span></div>
+          </div>
+        </div>
+
+        <div class="mb-4 flex gap-2">
+          <button id="explainBtn" class="px-3 py-1 rounded-md bg-slate-800 text-slate-200 text-xs">نمایش دلیل امتیاز</button>
+          <button id="showDbBtn" class="px-3 py-1 rounded-md bg-slate-800 text-slate-200 text-xs">نمایش JSON</button>
+        </div>
+
+        <div id="results" class="space-y-3 max-h-[56vh] overflow-auto pr-2"></div>
+      </section>
+    </section>
+  </main>
+  <script src="js/app.js"></script>
