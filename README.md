@@ -2,7 +2,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Language-JavaScript-yellow?style=for-the-badge&logo=javascript" alt="JS Badge"/>
-  <img src="https://img.shields.io/badge/Feature-TF-IDF_%2B_Fuzzy-red?style=for-the-badge" alt="Feature Badge"/>
   <img src="https://img.shields.io/badge/Language-Persian-green?style=for-the-badge" alt="Persian Badge"/>
 </p>
 
